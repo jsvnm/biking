@@ -1,9 +1,7 @@
 require 'open-uri'
-class ImageSaver
+class HudImage
 
-  def initialize
-    @url_base = "http://maps.googleapis.com/maps/api/staticmap?"
-  end
+  URL_BASE = "http://maps.googleapis.com/maps/api/staticmap?"
 
   def batch_save(gpx_data)
     #FileUtils.mkdir_p(File.dirname())
@@ -15,8 +13,16 @@ class ImageSaver
 
   def save(number, lat, lng)
     open("#{Rails.root}/output/test1/images/#{number.to_s.rjust(3, '0')}.png", 'wb') do |file|
-      file << static_image(lat, lng)
+      file << open(image_url(lat, lng)).read
     end
+  end
+
+  def image_url(lat, lng)
+    options = self.options.merge({
+      center: "#{lat},#{lng}",
+      markers: "color:blue|#{lat},#{lng}"
+    })
+    "#{URL_BASE}#{options.to_param}"
   end
 
   protected
@@ -26,16 +32,13 @@ class ImageSaver
     {
         zoom: 13,
         size: "150x150",
-        maptype: "roadmap",
+        maptype: "terrain", #"roadmap",
         key: "AIzaSyBBfQWFFtvFGXa8DJ6FkPW8biT8dp7OFJA",
-        sensor: false
+        sensor: false,
+        visual_refresh: true
     }
   end
 
-  def static_image(lat, lng)
-    url = "#{@url_base}#{options.merge(center: "#{lat},#{lng}").to_param}"
-    open(url).read
-  end
 
 
 end

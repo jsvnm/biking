@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="span12">
+    <h2>New Video</h2>
+  </div>
+</div>
+<%= form_for Video.new do |f| %>
+  <div class="row">
+    <div class="span4">
+      <%= f.label :cam_footage %>
+      <%= f.file_field :cam_footage %>
+      <%= f.hidden_field :cam_footage_cache %>
+    </div>
+
+    <div class="span4">
+      <%= f.label :gps_data %>
+      <%= f.file_field :gps_data %>
+      <%= f.hidden_field :gps_data_cache %>
+    </div>
+
+    <div class="span4">
+      <b class="vtop">Sample HUD:</b>
+      <a href="<%= HudImage.new.image_url(37.774729, -122.454477) %>" target="_blank">
+        <%= image_tag HudImage.new.image_url(37.774729, -122.454477) %>
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span4">
+      <%= f.submit 'Save', {class: 'btn'} %>
+    </div>
+  </div>
+<% end %>
+
+<section>
+  <table>
+    <% Video.all.each do |video| %>
+      <tr>
+        <td>
+          <%= video.slug %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</section>
