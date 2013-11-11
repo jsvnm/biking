@@ -1,10 +1,13 @@
 class VideoMaker
 
   def hud_options
+    # standard mapmyride frame rate:
+    # 579 points / 2:10:36 = 0.739 fps
+
     {
         f: 'image2',
         i: 'images/%03d.png',
-        r: '24',
+        r: '0.39',
         s: '200x200'
     }
   end
