@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class GpsDataUploader < CarrierWave::Uploader::Base
+class GpsDataUploader < ApplicationUploader
 
   def extension_white_list
     %w(gpx)

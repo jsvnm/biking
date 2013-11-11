@@ -1,3 +1,6 @@
+require "resque_web"
+
+
 Biking::Application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -6,6 +9,12 @@ Biking::Application.routes.draw do
   root 'videos#index'
 
   resources :videos
+
+  ResqueWeb::Engine.eager_load!
+  mount ResqueWeb::Engine => "/resque_web"
+
+  get '/perform' => 'videos#perform'
+
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

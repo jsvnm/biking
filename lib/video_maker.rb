@@ -1,14 +1,23 @@
 class VideoMaker
 
-  def hud_options
+  def initialize(batch_path, cam_footage)
+    @batch_path = batch_path
+    @cam_footage = cam_footage
+    @output_name = "output.mov"
+    @hud_file_name = "hud.mov"
+  end
+
+  def hud_video_options
     # standard mapmyride frame rate:
     # 579 points / 2:10:36 = 0.739 fps
 
+    # note: ordering matters on this hash.  The r before i makes it an input framerate flag
+    # we should change how these options are stored.
     {
         f: 'image2',
-        i: 'images/%03d.png',
         r: '0.39',
-        s: '200x200'
+        i: 'images/%03d.png',
+        s: '150x150'
     }
   end
 
@@ -19,23 +28,33 @@ class VideoMaker
     }
   end
 
-  def initialize(batch_name)
-    @batch_name = batch_name
-    @output_name = "output.mov"
-  end
-
   # turns images into video
   def generate
-    generate_hud
+    FileUtils.mkdir_p("#{output_directory}/video")
+    generate_hud_video
     overlay
   end
 
   protected
 
-  def generate_hud
-    Dir.chdir("output/#{@batch_name}") do
-      `ffmpeg -f image2 -i "images/%03d.png" -r 24 -s 200x200 video/hud.avi`
+  def output_directory
+    "#{Rails.root}/output/#{@batch_path}"
+  end
+
+  def ffmpeg(command)
+    Dir.chdir(output_directory) do
+      puts "Executing: ffmpeg #{command}"
+      puts `ffmpeg #{command}`
     end
+  end
+
+  # see docs at https://trac.ffmpeg.org/wiki/Create%20a%20video%20slideshow%20from%20images
+  def generate_hud_video
+    flags = hud_video_options.map do |key, value|
+      "-#{key} #{value}"
+    end.join(' ')
+    # todo: dry 150x150 against HUD image.  possible move both to video.rb
+    ffmpeg "#{flags} video/#{@hud_file_name}"
   end
 
   def overlay
@@ -51,9 +70,7 @@ class VideoMaker
                   "overlay=#{offset}:#{offset}"
               end
 
-    Dir.chdir("output/#{@batch_name}") do
-      `ffmpeg -i source.mov -i hud.avi  -filter_complex '#{overlay}' "#{@output_name}"`
-    end
+    ffmpeg "-i #{@cam_footage.url} -i video/#{@hud_file_name} -filter_complex '#{overlay}' 'video/#{@output_name}'"
   end
 
 end

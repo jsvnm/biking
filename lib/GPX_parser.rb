@@ -1,8 +1,8 @@
 class GPXParser
   @points = []
 
-  def initialize(file_name)
-    xml = Nokogiri::XML(open("#{Rails.root}/uploads/#{file_name}"))
+  def initialize(file_url)
+    xml = Nokogiri::XML(open(file_url))
     @points = xml.css('trkpt')
   end
 

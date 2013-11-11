@@ -6,19 +6,21 @@
 <%= form_for Video.new do |f| %>
   <div class="row">
     <div class="span4">
+      <%= f.label :slug %>
+      <%= f.text_field :slug %>
+      <br/>
       <%= f.label :cam_footage %>
       <%= f.file_field :cam_footage %>
       <%= f.hidden_field :cam_footage_cache %>
-    </div>
-
-    <div class="span4">
+      <br/>
       <%= f.label :gps_data %>
       <%= f.file_field :gps_data %>
       <%= f.hidden_field :gps_data_cache %>
     </div>
 
     <div class="span4">
-      <b class="vtop">Sample HUD:</b>
+      <label class="vtop">Sample HUD:</label>
+      <br/>
       <a href="<%= HudImage.new.image_url(37.774729, -122.454477) %>" target="_blank">
         <%= image_tag HudImage.new.image_url(37.774729, -122.454477) %>
       </a>
@@ -32,13 +34,46 @@
 <% end %>
 
 <section>
-  <table>
-    <% Video.all.each do |video| %>
-      <tr>
-        <td>
-          <%= video.slug %>
-        </td>
-      </tr>
-    <% end %>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>
+        Slug
+      </th>
+      <th>
+        State
+      </th>
+      <th>
+        Began
+      </th>
+      <th>
+        Ended
+      </th>
+      <th>
+        Link
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+      <% Video.all.each do |video| %>
+        <tr>
+          <td>
+            <%= video.slug %>
+          </td>
+          <td>
+            <%= video.state %>
+          </td>
+          <td>
+            <%= video.processing_began_at.to_s(:quick) if video.processing_began_at %>
+          </td>
+          <td>
+            <%= video.processing_finished_at.to_s(:quick) if video.processing_finished_at %>
+          </td>
+          <td>
+            <%= video.output_video.url %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
   </table>
 </section>

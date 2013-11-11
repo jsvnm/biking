@@ -28,6 +28,12 @@ gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
 
+gem 'foreman'
+gem "resque"
+gem 'resque-web', require: 'resque_web'
+
+
+
 group :development do
   gem "better_errors"
   gem "binding_of_caller"
@@ -39,6 +45,7 @@ end
 
 group :development, :test do
   gem 'rspec-rails', '~> 2.0'
+  gem 'factory_girl'
 end
 
 group :doc do

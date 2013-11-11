@@ -4,8 +4,19 @@ class VideosController < ApplicationController
   end
 
   def create
-    @points = GPXParser.new("1.06mi_touring_bike_on_11_9_13.gpx").points
-    @images = HudImage.new().batch_save(@points)
+    Video.create!(video_params)
+    redirect_to(action: :index)
+  end
+
+  def perform
+    VideoProcessor.perform(Video.last.id)
+    render text: 'ok'
+  end
+
+  protected
+
+  def video_params
+    params.require(:video).permit(:slug, :cam_footage, :cam_footage_cache, :gps_data, :gps_data_cache)
   end
 
 end
