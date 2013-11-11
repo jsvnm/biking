@@ -14,7 +14,7 @@ class ImageSaver
   end
 
   def save(number, lat, lng)
-    open("#{Rails.root}/output/test1/#{number.to_s.rjust(3, '0')}.png", 'wb') do |file|
+    open("#{Rails.root}/output/test1/images/#{number.to_s.rjust(3, '0')}.png", 'wb') do |file|
       file << static_image(lat, lng)
     end
   end
@@ -25,7 +25,7 @@ class ImageSaver
     #"http://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Ccolor:red%7Clabel:C%7C40.718217,-73.998284&sensor=false&key=AIzaSyBBfQWFFtvFGXa8DJ6FkPW8biT8dp7OFJA"
     {
         zoom: 13,
-        size: "200x200",
+        size: "150x150",
         maptype: "roadmap",
         key: "AIzaSyBBfQWFFtvFGXa8DJ6FkPW8biT8dp7OFJA",
         sensor: false

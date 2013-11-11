@@ -18,3 +18,5 @@
 .idea
 output/
 uploads/
+
+.DS_Store
